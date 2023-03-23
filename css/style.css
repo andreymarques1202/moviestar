@@ -121,7 +121,7 @@
     line-height: 3;
 }
 
-#social-container li:hoveR {
+#social-container li:hover {
     background-color: #333;
 }
 
