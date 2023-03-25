@@ -7,7 +7,7 @@ require_once("globals.php");
 require_once("db.php");
 
 $message = new Message($BASE_URL);
-
+$userDao = new UserDAO($connect, $BASE_URL);
 //resgata o tipo do formulario
 
 $type = filter_input(INPUT_POST, "type");
@@ -24,9 +24,23 @@ if($type === "register") {
 
     if($name && $lastname && $email && $password) {
 
+        //Verificar se as senhas batem
+        if($password === $confirmpassword) {
+
+            //verificar se o email já está cadastrado no sistema
+            if($userDao->findByEmail($email) === false) {
+
+            } else {
+                $message->setMessage("Usuário já cadastrado!, tente outro e-mail.", "error", "back");
+            }
+
+        } else {
+            //enviar mensagem de erro cso as senhas não forem iguais
+            $message->setMessage("As senhas não são iguais.", "error", "back");
+        }
     } else {
         //enviar mensagem de erro, de dados faltantes
-        $message->setMessage("Por favore, preencha todos os campos.", "error", "back");
+        $message->setMessage("Por favor, preencha todos os campos.", "error", "back");
 
     }
 
