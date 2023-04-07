@@ -49,7 +49,28 @@
         }
 
         public function update(User $user) {
+            $stmt = $this->connect->prepare("UPDATE users SET 
+            name = :name,
+            lastname = :lastname,
+            email = :email,
+            image = :image,
+            bio = :bio,
+            token = :token
+            WHERE id = :id");
 
+            $stmt->bindParam(":name", $user->name);
+            $stmt->bindParam(":lastname", $user->lastname);
+            $stmt->bindParam(":email", $user->email);
+            $stmt->bindParam(":image", $user->image);
+            $stmt->bindParam(":bio", $user->bio);
+            $stmt->bindParam(":token", $user->token);
+            $stmt->bindParam(":id", $user->id);
+
+            $stmt->execute();
+            
+            // Redireciona e apresenta mensagem de sucesso
+      $this->message->setMessage("Dados atualizados com sucesso!", "success", "editprofile.php");
+      
         }
 
         public function verifyToken($protected = false) {
