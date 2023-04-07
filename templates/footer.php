@@ -21,7 +21,7 @@
                         <a href="#">Adicionar crítica</a>
                     </li>
                     <li>
-                        <a href="#">Entrar / Registrar</a>
+                        <a href="auth.php">Entrar / Registrar</a>
                     </li>
                 </ul>
             </div>
