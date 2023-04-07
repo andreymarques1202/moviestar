@@ -88,7 +88,23 @@
         }
 
         public function verifyToken($protected = false) {
+            
+            if(!empty($_SESSION["token"])) {
+                //pega o token da session
+                $token = $_SESSION["token"];
 
+                $user = $this->findByToken($token);
+
+                if($user) {
+                    return $user;
+                } else if($protected) {
+                    // Redireciona para home caso não haja usuário
+          $this->message->setMessage("Faça a autenticação para acessar esta página.", "error", "index.php");
+
+                } else {
+                    return false;
+                }
+            }
         }
 
         public function setTokenSession($token, $redirect = true) {
@@ -103,7 +119,32 @@
         }
 
         public function authenticateUser($email, $password) {
+            $user = new User();
+            $user = $this->findByEmail($email);
 
+            //checa se o usuario existe
+            if($user) {
+
+                //Checa se a senha bate
+                if(password_verify($password, $user->password)) {
+
+                    //gera o token e coloca na session, sem redirecionar
+
+                    $token = $user->generateToken();
+
+                    $this->setTokenSession($token, false);
+
+                    //atualiza token do usuário
+
+                    $user->token = $token;
+
+                    $this->update($user);
+
+                    return true;
+                }
+
+                return false;
+            }
         }
 
         public function findByEmail($email) {
