@@ -1,10 +1,10 @@
 <?php
 
-require_once("models/User.php");
-require_once("models/message.php");
-require_once("dao/userDAO.php");
-require_once("globals.php");
-require_once("db.php");
+include_once("models/user.php");
+include_once("models/message.php");
+include_once("dao/userDAO.php");
+include_once("globals.php");
+include_once("db.php");
 
 $message = new Message($BASE_URL);
 $userDao = new UserDAO($connect, $BASE_URL);
@@ -32,7 +32,7 @@ if($type === "register") {
 
                 $user = new User();
 
-                //Criçãp de token e senha
+                //Crição de token e senha
                 $userToken = $user->generateToken();
                 $finalPassword = $user->generatePassword($password);
 
@@ -61,5 +61,21 @@ if($type === "register") {
     }
 
 } else if($type === "login") {
+    $email = filter_input(INPUT_POST, 'email', FILTER_VALIDATE_EMAIL);
+    $password = filter_input(INPUT_POST, 'password')
 
+    // se conseguir autenticar, mensagem de sucesso
+
+    if($userDao->authenticateUser($email, $password)) {
+
+        $message->setMessage("Seja- Bem-Vindo!", "sucess", "editprofile.php");
+
+    } else {
+
+        // Caso não autenticar, redireciona para a pagina auth com erro
+        $message->setMessage("Usuário e/ou senha incorretos!", "error", "auth.php");
+    }
+} else {
+
+    $message->setMessage("Informações inválidas, tente novamente.", "error", "index.php");
 }
