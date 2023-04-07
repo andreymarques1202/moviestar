@@ -143,8 +143,17 @@
                     return true;
                 }
 
-                return false;
             }
+            return false;
+        }
+
+        public function destroyToken() {
+            //Remove o token
+
+            $_SESSION["token"] = "";
+
+            //Redireciona e apresenta mensagem de sucesso
+            $this->message->setMessage("Você fez o logout com Sucesso!", "sucess", "index.php")
         }
 
         public function findByEmail($email) {
