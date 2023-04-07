@@ -153,8 +153,9 @@
             $_SESSION["token"] = "";
 
             //Redireciona e apresenta mensagem de sucesso
-            $this->message->setMessage("Você fez o logout com Sucesso!", "sucess", "index.php")
+            $this->message->setMessage("Você fez o logout com Sucesso!", "sucess", "index.php");
         }
+        
 
         public function findByEmail($email) {
 
@@ -183,16 +184,42 @@
       
           }
 
-        public function findById($id) {
-
-        }
-
         public function findByToken($token) {
+            $stmt = $this->connect->prepare("SELECT *  FROM users WHERE token = :token");
+            $stmt->bindParam(":token", $token);
 
+            $stmt->execute();
+
+            if($stmt->rowCount() > 0) {
+                $data = $stmt->fetch();
+                $user = $this->buildUser($data);
+
+                return $user;
+            } else {
+                return false;
+            }
         }
 
-        public function changePassword(User $user) {
+        public function findById($id) {
+            if($id != "") {
+      
+                $stmt = $this->connect->prepare("SELECT * FROM users WHERE id = :id");
+                
+                $stmt->bindParam(":id", $id);
+        
+                $stmt->execute();
+        
+                if($stmt->rowCount() > 0) {
+        
+                  $data = $stmt->fetch();
+                  $user = $this->buildUser($data);
+          
+                  return $user;
+        
+                } else {
+                  return false;
+                }
+            }
 
         }
-
     }
