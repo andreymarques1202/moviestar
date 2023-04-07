@@ -67,9 +67,23 @@
             $stmt->bindParam(":id", $user->id);
 
             $stmt->execute();
-            
             // Redireciona e apresenta mensagem de sucesso
       $this->message->setMessage("Dados atualizados com sucesso!", "success", "editprofile.php");
+      
+        }
+
+        public function changePassword($user) {
+            $stmt = $this->connect->prepare("UPDATE users SET
+            password = :password 
+            WHERE id = :id");
+
+            $stmt->bindParam(":password", $user->password);
+            $stmt->bindParam(":id", $user->id);
+
+            $stmt->execute();
+
+            // Redireciona e apresenta mensagem de sucesso
+            $this->message->setMessage("Senha atualizada!", "success", "editprofile.php");
       
         }
 
